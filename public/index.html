@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GawaiKita</title>
+  <meta name="description"
+    content="Pusat jual beli gadget original bergaransi resmi: smartphone, laptop, smartwatch, dan aksesoris audio dengan harga terbaik.">
+
+  <!-- Google Fonts: Space Grotesk & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       TOP COMMERCE ANNOUNCEMENT BAR (PROMO ASLI MARKETPLACE)
+       ============================================================ -->
+  <div class="top-promo-bar">
+    <div class="container top-promo-content">
+      <div class="promo-text">
+        <i class="fa-solid fa-truck-fast"></i> <span>Gratis Ongkir ke Seluruh Indonesia untuk Transaksi Pertama • 100%
+          Produk Original & Bergaransi Resmi</span>
+      </div>
+      <div class="promo-links">
+        <a href="#katalog"><i class="fa-solid fa-bolt"></i> Promo Spesial Gadget</a>
+        <span class="divider">|</span>
+        <a href="/research" class="lab-link" title="Buka Laboratorium Riset Testbed"><i class="fa-solid fa-flask"></i>
+          Portal Riset Lab</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MAIN NAVBAR
+       ============================================================ -->
+  <header class="main-header" id="mainHeader">
+    <div class="container navbar-inner">
+      <!-- Brand Logo -->
+      <a href="/" class="brand-logo">
+        <div class="logo-icon">
+          <i class="fa-solid fa-microchip"></i>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">Gawai<span class="logo-accent">Kita</span></span>
+          <span class="logo-subtitle">Gadget & Tech Store</span>
+        </div>
+      </a>
+
+      <!-- Search Bar Besar -->
+      <div class="nav-search-wrapper">
+        <form class="nav-search-form" id="navSearchForm" onsubmit="event.preventDefault();">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="navSearchInput" class="search-input"
+            placeholder="Cari smartphone flagship, laptop tipis, smartwatch..." autocomplete="off">
+          <button type="button" class="search-clear-btn" id="searchClearBtn" style="display: none;">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+          <button type="submit" class="search-submit-btn" id="navSearchBtn">
+            Cari
+          </button>
+        </form>
+      </div>
+
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <!-- Cart Button (Hanya tampil untuk Customer & Guest) -->
+        <button class="nav-action-btn" id="cartToggleBtn" aria-label="Keranjang Belanja">
+          <div class="action-icon-wrap">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="badge-count" id="cartCount">0</span>
+          </div>
+          <span class="action-label">Keranjang</span>
+        </button>
+
+        <!-- Orders Button (untuk customer yang sudah login) -->
+        <button class="nav-action-btn" id="orderHistoryBtn" style="display: none;" aria-label="Riwayat Pesanan">
+          <div class="action-icon-wrap">
+            <i class="fa-solid fa-receipt"></i>
+          </div>
+          <span class="action-label">Pesanan</span>
+        </button>
+
+        <!-- Admin Dashboard Button (jika admin yang login) -->
+        <a href="/admin" class="nav-action-btn admin-direct-btn" id="adminDirectBtn" style="display: none;"
+          title="Buka Halaman Manajemen Admin">
+          <div class="action-icon-wrap">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <span class="action-label">Panel Admin</span>
+        </a>
+
+        <!-- User / Auth Button -->
+        <div class="auth-dropdown-wrapper">
+          <button class="btn-auth-trigger" id="authBtn">
+            <i class="fa-regular fa-user"></i>
+            <span id="authBtnText">Masuk</span>
+          </button>
+          <div class="user-menu-popover" id="userMenuPopover" style="display: none;">
+            <div class="user-menu-header">
+              <span class="user-menu-name" id="menuUserName">Pengguna</span>
+              <span class="user-menu-role" id="menuUserRole">Customer</span>
+            </div>
+            <div class="user-menu-divider"></div>
+            <button class="user-menu-item" id="menuProfileBtn"><i class="fa-solid fa-user-gear"></i> Pengaturan
+              Profil</button>
+            <button class="user-menu-item" id="menuOrdersBtn"><i class="fa-solid fa-receipt"></i> Riwayat
+              Pesanan</button>
+            <a href="/admin" class="user-menu-item" id="menuAdminLink" style="display: none;"><i
+                class="fa-solid fa-shield-halved"></i> Panel Administrator</a>
+            <div class="user-menu-divider"></div>
+            <button class="user-menu-item logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i>
+              Keluar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       HERO ASIMETRIS
+       ============================================================ -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <!-- Left Column: Headline & Action -->
+      <div class="hero-left">
+        <div class="hero-badge">
+          <span class="pulse-dot"></span> Pilihan Gadget Terkurasi & Bergaransi Resmi
+        </div>
+        <h1 class="hero-title">
+          Upgrade Performa Gadget Masa Kini
+        </h1>
+        <p class="hero-desc">
+          Temukan flagship smartphone, laptop ultra-tipis, smartwatch canggih, dan aksesoris audio resmi dengan
+          penawaran terbaik hari ini.
+        </p>
+
+        <!-- Quick Search Pill -->
+        <div class="hero-search-box">
+          <div class="hero-input-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="heroSearchInput" placeholder="Ketik gadget incaran Anda (misal: 'Kaira X1 Pro')...">
+          </div>
+          <button class="btn-hero-search" id="heroSearchBtn">Temukan</button>
+        </div>
+
+        <div class="hero-features">
+          <div class="feature-item">
+            <i class="fa-solid fa-shield-check feature-icon"></i>
+            <span>100% Produk Original</span>
+          </div>
+          <div class="feature-item">
+            <i class="fa-solid fa-truck-fast feature-icon"></i>
+            <span>Pengiriman Aman & Cepat</span>
+          </div>
+          <div class="feature-item">
+            <i class="fa-solid fa-award feature-icon"></i>
+            <span>Garansi Resmi 1 Tahun</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: 2x2 Collage Kolase Gadget Asimetris -->
+      <div class="hero-right">
+        <div class="gadget-collage">
+          <!-- Card 1: Smartphone -->
+          <div class="collage-card card-tall" onclick="quickViewProductByName('Kaira X1 Pro')">
+            <img src="https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600" alt="Flagship Smartphone"
+              loading="lazy">
+            <div class="collage-overlay">
+              <span class="collage-tag">Flagship</span>
+              <h4>Kaira X1 Pro</h4>
+              <div class="collage-price">Rp 7.899.000</div>
+            </div>
+          </div>
+          <!-- Card 2: Laptop -->
+          <div class="collage-card" onclick="quickViewProductByName('Zenoro Slim S3')">
+            <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600" alt="Ultra Laptop"
+              loading="lazy">
+            <div class="collage-overlay">
+              <span class="collage-tag">Studio OLED</span>
+              <h4>Zenoro Slim S3</h4>
+              <div class="collage-price">Rp 14.500.000</div>
+            </div>
+          </div>
+          <!-- Card 3: Smartwatch -->
+          <div class="collage-card" onclick="quickViewProductByName('Buddi Pulse Watch')">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600" alt="Smartwatch"
+              loading="lazy">
+            <div class="collage-overlay">
+              <span class="collage-tag">Wearable</span>
+              <h4>Buddi Pulse</h4>
+              <div class="collage-price">Rp 1.299.000</div>
+            </div>
+          </div>
+          <!-- Card 4: Audio TWS -->
+          <div class="collage-card" onclick="quickViewProductByName('Orinis TWS Buds')">
+            <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600" alt="TWS Earbuds"
+              loading="lazy">
+            <div class="collage-overlay">
+              <span class="collage-tag">ANC Audio</span>
+              <h4>Orinis TWS</h4>
+              <div class="collage-price">Rp 449.000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CATEGORY CHIPS BAR
+       ============================================================ -->
+  <section class="category-section">
+    <div class="container">
+      <div class="category-bar" id="categoryChips">
+        <button class="cat-chip active" data-category="">
+          <i class="fa-solid fa-border-all"></i> Semua Kategori
+        </button>
+        <button class="cat-chip" data-category="Smartphone">
+          <i class="fa-solid fa-mobile-screen-button"></i> Smartphone
+        </button>
+        <button class="cat-chip" data-category="Laptop">
+          <i class="fa-solid fa-laptop"></i> Laptop
+        </button>
+        <button class="cat-chip" data-category="Wearable">
+          <i class="fa-solid fa-clock"></i> Wearable
+        </button>
+        <button class="cat-chip" data-category="Aksesoris">
+          <i class="fa-solid fa-headphones"></i> Aksesoris
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       MAIN CATALOG & FILTER SECTION
+       ============================================================ -->
+  <main class="main-catalog-section" id="katalog">
+    <div class="container catalog-layout">
+      <!-- SIDEBAR FILTER STICKY -->
+      <aside class="catalog-sidebar" id="filterSidebar">
+        <div class="filter-header">
+          <h3><i class="fa-solid fa-sliders"></i> Filter Produk</h3>
+          <button type="button" class="btn-reset-filter" id="resetFilterBtn">Reset</button>
+        </div>
+
+        <!-- Filter 1: Rentang Harga (Min - Max) -->
+        <div class="filter-group">
+          <label class="filter-title">Rentang Harga (Rp)</label>
+          <div class="price-inputs">
+            <div class="input-prefix-wrap">
+              <span class="prefix">Rp</span>
+              <input type="number" id="filterMinPrice" class="filter-input" placeholder="Min" min="0">
+            </div>
+            <span class="price-divider">—</span>
+            <div class="input-prefix-wrap">
+              <span class="prefix">Rp</span>
+              <input type="number" id="filterMaxPrice" class="filter-input" placeholder="Maks" min="0">
+            </div>
+          </div>
+          <!-- Quick Price Buttons -->
+          <div class="quick-price-tags">
+            <button type="button" class="btn-price-tag" onclick="setPriceRange(0, 3000000)">&lt; 3 Jt</button>
+            <button type="button" class="btn-price-tag" onclick="setPriceRange(3000000, 8000000)">3 - 8 Jt</button>
+            <button type="button" class="btn-price-tag" onclick="setPriceRange(8000000, 20000000)">&gt; 8 Jt</button>
+          </div>
+        </div>
+
+        <!-- Filter 2: Brand Checkbox (Dinamis dari MongoDB) -->
+        <div class="filter-group">
+          <label class="filter-title">Brand Gadget</label>
+          <div class="brand-checkbox-list" id="brandCheckboxList">
+            <div style="font-size: 0.8rem; color: var(--text-muted); padding: 0.5rem 0;">
+              <i class="fa-solid fa-spinner fa-spin"></i> Memuat brand...
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter 3: Spesifikasi RAM -->
+        <div class="filter-group">
+          <label class="filter-title">Kapasitas RAM</label>
+          <div class="spec-pills-list">
+            <button type="button" class="spec-pill" data-spec-ram="6GB">6GB</button>
+            <button type="button" class="spec-pill" data-spec-ram="8GB">8GB</button>
+            <button type="button" class="spec-pill" data-spec-ram="12GB">12GB</button>
+            <button type="button" class="spec-pill" data-spec-ram="16GB">16GB</button>
+          </div>
+        </div>
+
+        <!-- Apply Button for Mobile -->
+        <button class="btn-apply-filter" id="applyFilterBtn">
+          Terapkan Filter
+        </button>
+      </aside>
+
+      <!-- PRODUCT GRID & SORT HEADER -->
+      <section class="catalog-content">
+        <!-- Catalog Controls Header -->
+        <div class="catalog-top-bar">
+          <div class="results-info">
+            <span class="results-count" id="resultsCountText">Memuat produk...</span>
+          </div>
+
+          <div class="sort-wrapper">
+            <label for="sortSelect"><i class="fa-solid fa-arrow-down-short-wide"></i> Urutkan:</label>
+            <select id="sortSelect" class="sort-select">
+              <option value="terbaru">Terbaru</option>
+              <option value="termurah">Harga: Termurah</option>
+              <option value="termahal">Harga: Termahal</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Product Grid Container -->
+        <div class="products-grid" id="productsGrid">
+          <!-- Skeletons loaded via JS -->
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+          <i class="fa-regular fa-folder-open empty-icon"></i>
+          <h3>Produk Tidak Ditemukan</h3>
+          <p>Coba ubah kriteria filter harga, brand, atau kata kunci pencarian Anda.</p>
+          <button class="btn-secondary" onclick="resetFilters()">Reset Filter</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ============================================================
+       MODAL DETAIL PRODUK
+       ============================================================ -->
+  <div class="modal-overlay" id="productModal" style="display: none;">
+    <div class="modal-card product-modal-card">
+      <button class="modal-close-btn" onclick="closeProductModal()"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-product-layout">
+        <div class="modal-product-image">
+          <img id="modalProductImg" src="" alt="Detail Produk">
+          <div class="product-badge-float" id="modalProductCategory">Smartphone</div>
+        </div>
+
+        <div class="modal-product-info">
+          <div class="brand-row">
+            <span class="product-brand-tag" id="modalProductBrand">Brand</span>
+            <div class="product-rating" id="modalProductRating"><i class="fa-solid fa-star"></i> 4.8</div>
+          </div>
+          <h2 class="modal-title" id="modalProductName">Nama Produk</h2>
+
+          <div class="modal-price" id="modalProductPrice">Rp 0</div>
+
+          <div class="stock-status in-stock" id="modalProductStock">
+            <i class="fa-solid fa-circle-check"></i> Stok Tersedia
+          </div>
+
+          <p class="modal-desc" id="modalProductDesc">Deskripsi produk...</p>
+
+          <!-- Specifications Table -->
+          <div class="modal-specs-section">
+            <h4>Spesifikasi Teknis</h4>
+            <div class="specs-table" id="modalSpecsTable">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+
+          <!-- Quantity Stepper & Actions -->
+          <div class="modal-actions-row">
+            <div class="quantity-control">
+              <button class="qty-btn" id="modalQtyMinus">-</button>
+              <input type="number" id="modalQtyInput" value="1" min="1" readonly>
+              <button class="qty-btn" id="modalQtyPlus">+</button>
+            </div>
+            <button class="btn-add-cart-large" id="modalAddToCartBtn">
+              <i class="fa-solid fa-cart-plus"></i> + Keranjang
+            </button>
+            <button class="btn-buy-now-large" id="modalBuyNowBtn">
+              Beli Sekarang
+            </button>
+          </div>
+
+          <!-- Product Reviews Section -->
+          <div class="reviews-section" id="modalReviewsSection">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+              <h4 style="font-size: 0.95rem; font-weight: 700; margin: 0;"><i
+                  class="fa-solid fa-comments text-blue"></i> Ulasan Pembeli (<span id="modalReviewsCount">0</span>)
+              </h4>
+            </div>
+            <div class="reviews-list" id="modalReviewsList">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       CART DRAWER / OFFCANVAS (DENGAN CHECKOUT AUTH GUARD)
+       ============================================================ -->
+  <div class="drawer-overlay" id="cartDrawerOverlay" style="display: none;">
+    <aside class="cart-drawer" id="cartDrawer">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <i class="fa-solid fa-cart-shopping"></i> Keranjang Belanja (<span id="cartDrawerCount">0</span>)
+        </div>
+        <button class="drawer-close-btn" id="closeCartBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="drawer-body">
+        <div class="cart-items-list" id="cartItemsList">
+          <!-- Items injected by JS -->
+        </div>
+
+        <div class="cart-empty" id="cartEmpty" style="display: none;">
+          <i class="fa-solid fa-cart-arrow-down cart-empty-icon"></i>
+          <h4>Keranjang Anda Masih Kosong</h4>
+          <p>Eksplor produk gadget unggulan dan tambahkan ke keranjang.</p>
+        </div>
+      </div>
+
+      <div class="drawer-footer" id="cartFooter">
+        <div class="cart-summary-box">
+          <div class="summary-row">
+            <span>Subtotal Produk</span>
+            <span class="summary-val" id="cartSubtotal">Rp 0</span>
+          </div>
+          <div class="summary-row">
+            <span>Biaya Pengiriman</span>
+            <span class="summary-val text-free">GRATIS</span>
+          </div>
+          <div class="summary-row total-row">
+            <span>Total Pembayaran</span>
+            <span class="summary-val total-price" id="cartTotal">Rp 0</span>
+          </div>
+        </div>
+
+        <!-- Checkout Address Form (hanya jika login sebagai customer) -->
+        <div class="checkout-form-box" id="checkoutAddressBox">
+          <label class="form-label" for="checkoutAddress">Alamat Pengiriman:</label>
+          <input type="text" id="checkoutAddress" class="form-input" placeholder="Masukkan alamat pengiriman lengkap">
+        </div>
+
+        <!-- Tombol Checkout: Memvalidasi apakah user sudah login -->
+        <button class="btn-checkout" id="checkoutConfirmBtn">
+          <i class="fa-solid fa-lock"></i> Konfirmasi Pesanan
+        </button>
+        <p class="checkout-note" id="checkoutNote">
+          <i class="fa-solid fa-shield-check"></i> Transaksi terenkripsi & aman. Pesanan langsung diproses.
+        </p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ============================================================
+       MODAL AUTH (LOGIN & REGISTER)
+       ============================================================ -->
+  <div class="modal-overlay" id="authModal" style="display: none;">
+    <div class="modal-card auth-modal-card">
+      <button class="modal-close-btn" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+
+      <!-- Auth Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLoginBtn" onclick="switchAuthTab('login')">Masuk</button>
+        <button class="auth-tab" id="tabRegisterBtn" onclick="switchAuthTab('register')">Daftar Akun</button>
+      </div>
+
+      <!-- Quick Demo Login Helpers
+      <div class="quick-demo-box">
+        <span class="demo-title"><i class="fa-solid fa-key"></i> Akun Pengujian Cepat:</span>
+        <div class="demo-buttons">
+          <button type="button" class="btn-demo-pill" onclick="quickFillLogin('angga@gawaikita.test', 'password123')">
+            <i class="fa-solid fa-user"></i> Akun Pelanggan (Angga)
+          </button>
+          <button type="button" class="btn-demo-pill" onclick="quickFillLogin('admin@gawaikita.test', 'password123')">
+            <i class="fa-solid fa-shield"></i> Akun Administrator
+          </button>
+        </div>
+      </div>
+      -->
+
+      <!-- Form Login -->
+      <form id="loginForm" class="auth-form">
+        <div class="form-group">
+          <label class="form-label" for="loginEmail">Alamat Email</label>
+          <input type="email" id="loginEmail" class="form-input" placeholder="nama@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-primary btn-block" id="loginSubmitBtn">
+          Masuk ke Akun
+        </button>
+      </form>
+
+      <!-- Form Register -->
+      <form id="registerForm" class="auth-form" style="display: none;">
+        <div class="form-group">
+          <label class="form-label" for="regName">Nama Lengkap</label>
+          <input type="text" id="regName" class="form-input" placeholder="Nama Anda" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regEmail">Alamat Email</label>
+          <input type="email" id="regEmail" class="form-input" placeholder="nama@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regPassword">Password (Minimal 4 karakter)</label>
+          <input type="password" id="regPassword" class="form-input" placeholder="••••••••" required minlength="4">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regPhone">Nomor WhatsApp / HP</label>
+          <input type="text" id="regPhone" class="form-input" placeholder="08123456789">
+        </div>
+        <button type="submit" class="btn-primary btn-block" id="regSubmitBtn">
+          Daftar Sekarang
+        </button>
+      </form>
+
+      <div class="auth-status-msg" id="authStatusMsg" style="display: none;"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL RIWAYAT PESANAN (CUSTOMER)
+       ============================================================ -->
+  <div class="modal-overlay" id="ordersModal" style="display: none;">
+    <div class="modal-card orders-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-receipt"></i> Riwayat Pesanan Saya</h3>
+        <button class="modal-close-btn" onclick="closeOrdersModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Filter Status Tabs -->
+      <div class="order-status-tabs" id="orderStatusTabs">
+        <button class="status-tab active" data-status="">Semua</button>
+        <button class="status-tab" data-status="pending">Pending</button>
+        <button class="status-tab" data-status="paid">Paid (Terbayar)</button>
+        <button class="status-tab" data-status="shipped">Shipped (Dikirim)</button>
+        <button class="status-tab" data-status="completed">Completed (Selesai)</button>
+      </div>
+
+      <div class="orders-list-container" id="ordersListContainer">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL KONFIRMASI PEMBAYARAN WHATSAPP (REAL-MARKETPLACE)
+       ============================================================ -->
+  <div class="modal-overlay" id="waPaymentModal" style="display: none;">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-brands fa-whatsapp text-green"></i> Konfirmasi Pembayaran</h3>
+        <button class="modal-close-btn" onclick="closeWaPaymentModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="wa-modal-body">
+        <div class="wa-icon-large">
+          <i class="fa-brands fa-whatsapp"></i>
+        </div>
+        <span class="wa-order-badge" id="waOrderCode">Order #...</span>
+        <h4 style="font-size: 1.15rem; margin-bottom: 0.35rem;">Pesanan Berhasil Dicatat!</h4>
+        <p class="text-muted" style="font-size: 0.82rem;">Status pesanan: <strong style="color: #F59E0B;">Menunggu
+            Pembayaran (Pending)</strong></p>
+        <div class="wa-order-total" id="waOrderTotal">Rp 0</div>
+
+        <div class="wa-step-info">
+          <p style="margin-bottom: 0.35rem;"><strong><i class="fa-solid fa-circle-info text-blue"></i> Langkah
+              Penyelesaian:</strong></p>
+          <p style="margin-bottom: 0.25rem;">1. Klik tombol hijau di bawah untuk terhubung ke <strong>WhatsApp
+              Resmi</strong> (+62 812-9876-5432).</p>
+          <p style="margin-bottom: 0.25rem;">2. Kirim pesan otomatis berisi nomor pesanan & rincian total tagihan.</p>
+          <p>3. Admin akan memvalidasi bukti transfer dan mengubah status menjadi <strong>Terbayar (Paid)</strong>.</p>
+        </div>
+
+        <a href="#" target="_blank" class="wa-btn-chat" id="waChatLink">
+          <i class="fa-brands fa-whatsapp"></i> Buka WhatsApp & Konfirmasi Pembayaran
+        </a>
+
+        <div style="margin-top: 1rem;">
+          <button class="btn-secondary" style="width: 100%; justify-content: center;"
+            onclick="closeWaPaymentModal(); openOrdersModal();">
+            <i class="fa-solid fa-receipt"></i> Cek Status di Riwayat Pesanan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL BERI ULASAN / REVIEW PRODUK (CUSTOMER)
+       ============================================================ -->
+  <div class="modal-overlay" id="reviewModal" style="display: none;">
+    <div class="modal-card review-modal-card" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-star" style="color:var(--amber);"></i> Beri Ulasan Gadget</h3>
+        <button class="modal-close-btn" onclick="closeReviewModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div style="padding: 1.25rem;">
+        <input type="hidden" id="reviewProductId">
+
+        <!-- Product Quick Preview Header -->
+        <div class="review-product-preview"
+          style="display:flex; align-items:center; gap:0.75rem; background:var(--bg-subtle); padding:0.75rem; border-radius:var(--radius-md); margin-bottom:1rem; border:1px solid var(--border-light);">
+          <div
+            style="width:44px; height:44px; border-radius:var(--radius-sm); background:#FFFFFF; display:flex; align-items:center; justify-content:center; border:1px solid var(--border-light); font-size:1.2rem; color:var(--navy);">
+            <i class="fa-solid fa-mobile-screen"></i>
+          </div>
+          <div style="flex:1;">
+            <h4 id="reviewProductName"
+              style="font-size:0.92rem; font-weight:700; color:var(--text-main); margin-bottom:0.15rem; font-family:var(--font-heading);">
+              Nama Gadget</h4>
+            <span style="font-size:0.72rem; color:var(--text-muted);"><i class="fa-solid fa-circle-check"
+                style="color:var(--green);"></i> Pembelian Resmi Terverifikasi</span>
+          </div>
+        </div>
+
+        <!-- Rating Section -->
+        <div style="text-align:center; margin-bottom:1rem;">
+          <span
+            style="display:block; font-size:0.8rem; font-weight:600; color:var(--text-muted); margin-bottom:0.4rem;">Pilih
+            Penilaian Bintang:</span>
+          <div class="star-picker" id="starPicker">
+            <i class="fa-solid fa-star star active" data-rating="1"></i>
+            <i class="fa-solid fa-star star active" data-rating="2"></i>
+            <i class="fa-solid fa-star star active" data-rating="3"></i>
+            <i class="fa-solid fa-star star active" data-rating="4"></i>
+            <i class="fa-solid fa-star star active" data-rating="5"></i>
+          </div>
+          <div id="starPickerLabel" class="rating-sentiment-badge">
+            <i class="fa-solid fa-star" style="color:var(--amber);"></i> 5 dari 5 Bintang — Sangat Puas
+          </div>
+        </div>
+
+        <!-- Quick Sentiment Chips -->
+        <div style="margin-bottom:0.85rem;">
+          <span
+            style="font-size:0.75rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:0.35rem;">Pilih
+            Keunggulan Cepat:</span>
+          <div class="review-quick-tags" style="display:flex; flex-wrap:wrap; gap:0.35rem;">
+            <button type="button" class="quick-tag-btn"
+              onclick="appendReviewTag('Produk 100% original & bersegel resmi.')">+ Original & Segel</button>
+            <button type="button" class="quick-tag-btn" onclick="appendReviewTag('Baterai sangat awet seharian.')">+
+              Baterai Awet</button>
+            <button type="button" class="quick-tag-btn" onclick="appendReviewTag('Layar jernih dan performa ngebut.')">+
+              Layar Jernih</button>
+            <button type="button" class="quick-tag-btn"
+              onclick="appendReviewTag('Pengiriman cepat dan bubble wrap tebal.')">+ Packing Aman</button>
+          </div>
+        </div>
+
+        <!-- Review Comment Input -->
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; color:var(--text-main);">Deskripsi Pengalaman
+              Anda</label>
+            <small style="font-size:0.7rem; color:var(--text-muted);" id="reviewCharCounter">0 / 500 karakter</small>
+          </div>
+          <textarea id="reviewCommentInput" rows="3" maxlength="500" class="filter-input"
+            style="width: 100%; border-radius: var(--radius-sm); padding: 0.65rem; font-size:0.85rem; line-height:1.4;"
+            placeholder="Ceritakan performa, ketahanan baterai, kemulusan layar, atau kualitas pengemasan..."
+            oninput="updateReviewCharCount(this)"></textarea>
+        </div>
+
+        <div style="display:flex; gap:0.65rem;">
+          <button class="btn-secondary" style="flex:1; justify-content:center;"
+            onclick="closeReviewModal()">Batal</button>
+          <button class="btn-primary" style="flex:2; justify-content: center;" id="btnSubmitReview"
+            onclick="submitProductReview()">
+            <i class="fa-solid fa-paper-plane"></i> Kirim Ulasan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL PENGATURAN PROFIL PENGGUNA (CUSTOMER)
+       ============================================================ -->
+  <div class="modal-overlay" id="profileModal" style="display: none;">
+    <div class="modal-card" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-user-pen" style="color:var(--navy);"></i> Pengaturan Profil Akun
+        </h3>
+        <button class="modal-close-btn" onclick="closeProfileModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="profileEditForm" onsubmit="handleSaveProfile(event)" style="padding: 1.25rem;">
+        <!-- User Badge Row -->
+        <div
+          style="display:flex; align-items:center; gap:0.85rem; background:var(--bg-subtle); padding:0.85rem; border-radius:var(--radius-md); margin-bottom:1.15rem; border:1px solid var(--border-light);">
+          <div id="profileAvatarInitial"
+            style="width:46px; height:46px; border-radius:50%; background:var(--navy); color:#FFF; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.2rem; flex-shrink:0;">
+            A
+          </div>
+          <div style="flex:1; min-width:0;">
+            <div id="profileHeaderName"
+              style="font-weight:700; font-size:0.95rem; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+              Nama Pelanggan</div>
+            <div style="display:flex; align-items:center; gap:0.4rem; margin-top:0.15rem;">
+              <span class="badge-tag paid" id="profileHeaderRole"
+                style="font-size:0.7rem; padding:0.15rem 0.5rem;">CUSTOMER</span>
+              <span style="font-size:0.72rem; color:var(--green); font-weight:600;"><i
+                  class="fa-solid fa-circle-check"></i> Akun Terverifikasi</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Field 1: Nama / Username -->
+        <div class="form-group" style="margin-bottom: 0.9rem;">
+          <label
+            style="font-size: 0.8rem; font-weight: 600; color:var(--text-main); display:block; margin-bottom:0.35rem;">
+            Nama Lengkap / Username <span style="color:var(--red);">*</span>
+          </label>
+          <input type="text" id="profileNameInput" class="filter-input"
+            style="width:100%; padding:0.65rem 0.8rem; font-size:0.88rem; border-radius:var(--radius-sm);" required
+            maxlength="100" placeholder="Nama lengkap Anda">
+        </div>
+
+        <!-- Field 2: Nomor Telepon / WhatsApp -->
+        <div class="form-group" style="margin-bottom: 0.9rem;">
+          <label
+            style="font-size: 0.8rem; font-weight: 600; color:var(--text-main); display:block; margin-bottom:0.35rem;">
+            Nomor Telepon / WhatsApp
+          </label>
+          <input type="tel" id="profilePhoneInput" class="filter-input"
+            style="width:100%; padding:0.65rem 0.8rem; font-size:0.88rem; border-radius:var(--radius-sm);"
+            maxlength="20" placeholder="Contoh: 081312345678">
+          <small style="font-size:0.72rem; color:var(--text-muted); margin-top:0.25rem; display:block;">Digunakan untuk
+            verifikasi konfirmasi pesanan via WhatsApp.</small>
+        </div>
+
+        <!-- Field 3: Alamat Pengiriman -->
+        <div class="form-group" style="margin-bottom: 0.9rem;">
+          <label
+            style="font-size: 0.8rem; font-weight: 600; color:var(--text-main); display:block; margin-bottom:0.35rem;">
+            Alamat Pengiriman Utama
+          </label>
+          <textarea id="profileAddressInput" rows="3" maxlength="300" class="filter-input"
+            style="width:100%; padding:0.65rem 0.8rem; font-size:0.88rem; border-radius:var(--radius-sm); line-height:1.4; resize:vertical;"
+            placeholder="Alamat jalan, nomor rumah, RT/RW, kota, kode pos..."></textarea>
+        </div>
+
+        <!-- Field 4: Alamat Email (Permanen / Read-only) -->
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; color:var(--text-main);">Alamat Email</label>
+            <span
+              style="font-size:0.7rem; color:var(--text-muted); display:inline-flex; align-items:center; gap:0.25rem;">
+              <i class="fa-solid fa-lock"></i> Tidak dapat diubah
+            </span>
+          </div>
+          <input type="email" id="profileEmailInput" class="filter-input" disabled readonly
+            style="width:100%; padding:0.65rem 0.8rem; font-size:0.88rem; border-radius:var(--radius-sm); background:#F1F5F9; color:var(--text-muted); cursor:not-allowed; border-color:#CBD5E1;">
+          <small style="font-size:0.71rem; color:var(--text-muted); margin-top:0.25rem; display:block;">
+            Email merupakan ID login unik akun Anda dan dilindungi demi integritas keamanan transaksi.
+          </small>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display:flex; gap:0.65rem;">
+          <button type="button" class="btn-secondary" style="flex:1; justify-content:center;"
+            onclick="closeProfileModal()">Batal</button>
+          <button type="submit" class="btn-primary" style="flex:2; justify-content:center;" id="btnSaveProfile">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="main-footer">
+    <div class="container footer-grid">
+      <div class="footer-col brand-col">
+        <div class="logo-icon-footer">
+          <i class="fa-solid fa-microchip"></i>
+          <span class="footer-brand-name">Gawai<span>Kita</span></span>
+        </div>
+        <p class="footer-tagline">
+          Marketplace gadget & elektronik terpercaya dengan jaminan 100% produk original dan garansi resmi. Belanja
+          gadget impian dengan aman, cepat, dan transparan.
+        </p>
+        <div class="footer-badges">
+          <span><i class="fa-solid fa-shield-halved"></i> Garansi Resmi</span>
+          <span><i class="fa-solid fa-truck"></i> Pengiriman Cepat</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Kategori Produk</h4>
+        <ul>
+          <li><a href="#katalog" onclick="filterByCategory('Smartphone')">Smartphone Flagship & Mid-range</a></li>
+          <li><a href="#katalog" onclick="filterByCategory('Laptop')">Laptop Tipis & Performa</a></li>
+          <li><a href="#katalog" onclick="filterByCategory('Wearable')">Smartwatch & Fitness Band</a></li>
+          <li><a href="#katalog" onclick="filterByCategory('Aksesoris')">TWS & Fast Charger GaN</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Layanan Pelanggan</h4>
+        <ul>
+          <li><a href="#">Panduan Pembelian</a></li>
+          <li><a href="#">Ketentuan Garansi</a></li>
+          <li><a href="#">Pelacakan Pesanan</a></li>
+          <li><a href="#">Pusat Bantuan</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Akses Sistem</h4>
+        <ul>
+          <li><a href="/research"><i class="fa-solid fa-flask"></i> Laboratorium Riset NoSQL</a></li>
+        </ul>
+        <p class="copyright">© 2026 GawaiKita Technologies. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Application Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/store.js"></script>
+</body>
+
+</html>

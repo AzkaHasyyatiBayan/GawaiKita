@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Administrator — GawaiKita</title>
+
+  <!-- Google Fonts: Space Grotesk & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome Icons (SVG-based web fonts) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Chart.js untuk Dashboard Analisis Penjualan -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       TOP HORIZONTAL NAVBAR
+       ============================================================ -->
+  <header class="admin-navbar">
+    <div class="admin-nav-inner">
+      <!-- Brand Logo -->
+      <a href="/admin" class="admin-brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-microchip"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Gawai<span>Kita</span></span>
+        </div>
+      </a>
+
+      <!-- Center Navigation Tabs -->
+      <nav class="admin-nav-tabs">
+        <button class="nav-tab active" data-section="dashboard">
+          <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
+        </button>
+        <button class="nav-tab" data-section="products">
+          <i class="fa-solid fa-boxes-stacked"></i> <span>Katalog Produk</span>
+        </button>
+        <button class="nav-tab" data-section="orders">
+          <i class="fa-solid fa-receipt"></i> <span>Pesanan Pelanggan</span>
+        </button>
+        <button class="nav-tab" data-section="users">
+          <i class="fa-solid fa-users-gear"></i> <span>Data Pengguna</span>
+        </button>
+      </nav>
+
+      <!-- Right Profile & Actions -->
+      <div class="admin-nav-right">
+        <a href="/" class="btn-nav-store" title="Buka Etalase Toko">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> <span>Kunjungi Toko</span>
+        </a>
+        <div class="admin-profile-pill">
+          <div class="profile-avatar"><i class="fa-solid fa-user-shield"></i></div>
+          <div class="profile-text">
+            <strong id="adminName">GawaiKita</strong>
+            <small id="adminRole">Administrator</small>
+          </div>
+        </div>
+        <button class="btn-nav-logout" id="adminLogoutBtn" title="Keluar dari Akun">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       MAIN DASHBOARD CONTAINER
+       ============================================================ -->
+  <div class="admin-main-container">
+
+    <!-- Page Title Header -->
+    <div class="admin-page-header">
+      <div>
+        <h2 id="pageTitle">Dashboard Analisis Penjualan</h2>
+        <p id="pageSubtitle">Ringkasan performa omzet dan inventaris toko GawaiKita</p>
+      </div>
+      <div>
+        <button class="btn-refresh" onclick="refreshCurrentSection()">
+          <i class="fa-solid fa-arrows-rotate"></i> <span>Segarkan Data</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- SECTION 1: DASHBOARD ANALISIS -->
+    <section class="admin-section" id="section-dashboard">
+      <!-- KPI Stats Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon revenue"><i class="fa-solid fa-wallet"></i></div>
+          <div class="kpi-data">
+            <span class="kpi-label">Total Omzet Penjualan</span>
+            <span class="kpi-value" id="kpiRevenue">Rp 0</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon orders"><i class="fa-solid fa-bag-shopping"></i></div>
+          <div class="kpi-data">
+            <span class="kpi-label">Transaksi Selesai</span>
+            <span class="kpi-value" id="kpiOrders">0 Pesanan</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon products"><i class="fa-solid fa-box-archive"></i></div>
+          <div class="kpi-data">
+            <span class="kpi-label">Katalog Produk Aktif</span>
+            <span class="kpi-value" id="kpiProducts">0 Item</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon users"><i class="fa-solid fa-user-check"></i></div>
+          <div class="kpi-data">
+            <span class="kpi-label">Pelanggan Terdaftar</span>
+            <span class="kpi-value" id="kpiUsers">0 User</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="fa-solid fa-chart-column"></i> Ringkasan Status Pesanan</h3>
+            <span class="chart-tag">Transaksi Real-time</span>
+          </div>
+          <div class="chart-body" style="height: 250px; position: relative;">
+            <canvas id="orderStatusBarChart"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="fa-solid fa-chart-pie"></i> Distribusi Kategori Produk</h3>
+            <span class="chart-tag">Inventaris Aktif</span>
+          </div>
+          <div class="chart-body" style="height: 250px; position: relative;">
+            <canvas id="categoryPieChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: MANAJEMEN PRODUK -->
+    <section class="admin-section" id="section-products" style="display: none;">
+      <div class="table-top-actions">
+        <div class="table-search-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="productSearchInput" placeholder="Cari nama, brand, atau kategori produk...">
+        </div>
+        <button class="btn-admin-primary" onclick="openAddProductModal()">
+          <i class="fa-solid fa-plus"></i> Tambah Produk Baru
+        </button>
+      </div>
+
+      <!-- Responsive Scrollable Table Container -->
+      <div class="table-responsive-wrapper">
+        <table class="admin-data-table">
+          <thead>
+            <tr>
+              <th style="width: 70px;">Foto</th>
+              <th>Nama Produk</th>
+              <th>Kategori</th>
+              <th>Brand</th>
+              <th>Harga (Rp)</th>
+              <th>Stok</th>
+              <th>Rating</th>
+              <th style="width: 130px;">Ulasan Pembeli</th>
+              <th style="width: 140px; text-align: right;">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="productsTableBody">
+            <!-- Injected via admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 3: MANAJEMEN PESANAN -->
+    <section class="admin-section" id="section-orders" style="display: none;">
+      <div class="table-responsive-wrapper">
+        <table class="admin-data-table">
+          <thead>
+            <tr>
+              <th>ID Pesanan</th>
+              <th>Pelanggan</th>
+              <th>Alamat Pengiriman</th>
+              <th>Rincian Item</th>
+              <th>Total Tagihan</th>
+              <th>Status Pesanan</th>
+              <th style="text-align: right;">Validasi / Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+            <!-- Injected via admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 4: DATA PENGGUNA -->
+    <section class="admin-section" id="section-users" style="display: none;">
+      <div class="table-top-actions">
+        <div class="table-search-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="userSearchInput" placeholder="Cari nama atau email pelanggan...">
+        </div>
+        <button class="btn-admin-secondary" onclick="loadUsersTable()">
+          <i class="fa-solid fa-arrows-rotate"></i> Muat Ulang Data
+        </button>
+      </div>
+
+      <div class="table-responsive-wrapper">
+        <table class="admin-data-table">
+          <thead>
+            <tr>
+              <th>Nama Lengkap</th>
+              <th>Alamat Email</th>
+              <th>Role Akun</th>
+              <th>Nomor Telepon</th>
+              <th>Alamat Terdaftar</th>
+              <th>Tanggal Registrasi</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <!-- Injected via admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ============================================================
+       MODAL FORM PRODUK (TAMBAH & EDIT)
+       ============================================================ -->
+  <div class="admin-modal-overlay" id="productFormModal" style="display: none;">
+    <div class="admin-modal-card">
+      <div class="admin-modal-header">
+        <h3 id="formModalTitle"><i class="fa-solid fa-box-open text-blue"></i> Tambah Produk Baru</h3>
+        <button class="modal-close-btn" onclick="closeProductModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="productForm" onsubmit="handleSaveProduct(event)">
+        <input type="hidden" id="editProductId">
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Nama Produk *</label>
+            <input type="text" id="formProdName" class="form-input" required placeholder="Contoh: Kaira X1 Pro">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Brand *</label>
+            <input type="text" id="formProdBrand" class="form-input" required placeholder="Contoh: Kaira">
+          </div>
+        </div>
+
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label class="form-label">Kategori *</label>
+            <select id="formProdCategory" class="form-input" required>
+              <option value="Smartphone">Smartphone</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Wearable">Wearable</option>
+              <option value="Aksesoris">Aksesoris</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Harga Satuan (Rp) *</label>
+            <input type="number" id="formProdPrice" class="form-input" required min="0" placeholder="7899000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stok Inventaris *</label>
+            <input type="number" id="formProdStock" class="form-input" required min="0" placeholder="15">
+          </div>
+        </div>
+
+        <div class="form-grid-4">
+          <div class="form-group">
+            <label class="form-label">RAM</label>
+            <input type="text" id="formProdRam" class="form-input" placeholder="12GB">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Penyimpanan</label>
+            <input type="text" id="formProdStorage" class="form-input" placeholder="256GB">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Layar</label>
+            <input type="text" id="formProdScreen" class="form-input" placeholder="6.7 inch">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Baterai</label>
+            <input type="text" id="formProdBattery" class="form-input" placeholder="5200mAh">
+          </div>
+        </div>
+
+        <!-- Image Input: URL / GDrive Link + Local File Picker -->
+        <div class="form-group"
+          style="background:#F8FAFC; padding:0.85rem; border-radius:var(--radius-sm); border:1px dashed var(--border);">
+          <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
+            <span><i class="fa-solid fa-image text-blue"></i> Gambar Produk</span>
+            <small style="color:var(--text-muted); font-size:0.75rem;">Mendukung Link URL, Google Drive, atau Upload
+              Lokal</small>
+          </label>
+          <div style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
+            <input type="text" id="formProdImageUrl" class="form-input" style="flex:1;"
+              placeholder="Tempel URL gambar atau link Google Drive...">
+          </div>
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <span style="font-size:0.75rem; color:var(--text-muted);">Atau upload file dari komputer:</span>
+            <input type="file" id="formProdFileInput" accept="image/*" style="font-size:0.75rem;">
+          </div>
+          <!-- Live Image Preview Wrap -->
+          <div id="formImagePreviewWrap" style="margin-top:0.65rem; display:none;">
+            <span style="font-size:0.72rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Preview
+              Gambar:</span>
+            <img id="formImagePreview" src="" alt="Preview" referrerpolicy="no-referrer"
+              style="max-height:100px; border-radius:6px; border:1px solid var(--border); object-fit:cover;">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Deskripsi Lengkap Produk</label>
+          <textarea id="formProdDesc" class="form-input" rows="3"
+            placeholder="Tuliskan spesifikasi, garansi resmi, dan fitur unggulan produk..."></textarea>
+        </div>
+
+        <div class="modal-form-actions">
+          <button type="submit" class="btn-admin-primary">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan ke Database
+          </button>
+          <button type="button" class="btn-admin-secondary" onclick="closeProductModal()">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL LIHAT & BALAS ULASAN PRODUK (ADMIN)
+       ============================================================ -->
+  <div class="admin-modal-overlay" id="adminReviewsModal" style="display: none;">
+    <div class="admin-modal-card" style="max-width: 580px;">
+      <div class="admin-modal-header">
+        <h3 id="adminReviewProdTitle"><i class="fa-solid fa-comments text-blue"></i> Ulasan Produk</h3>
+        <button class="modal-close-btn" onclick="closeAdminReviewsModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div style="padding: 1.25rem;">
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Pantau feedback dari pelanggan dan berikan balasan resmi atas ulasan pembeli gadget ini.
+        </p>
+
+        <!-- Container Ulasan -->
+        <div id="adminReviewsListContainer" style="max-height: 400px; overflow-y: auto; padding-right: 0.35rem;">
+          <!-- Injected via admin.js -->
+        </div>
+
+        <div style="margin-top: 1.25rem; text-align: right;">
+          <button class="btn-admin-secondary" onclick="closeAdminReviewsModal()">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       AUTH GUARD OVERLAY (JIKA BUKAN ADMIN)
+       ============================================================ -->
+  <div class="auth-guard-overlay" id="authGuardOverlay" style="display: none;">
+    <div class="auth-guard-card">
+      <div class="guard-icon"><i class="fa-solid fa-shield-halved"></i></div>
+      <h3 style="margin-bottom: 0.5rem; font-family: var(--font-heading);">Akses Khusus Administrator</h3>
+      <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5;">
+        Halaman ini memerlukan sesi login administrator resmi untuk mengelola inventaris, pesanan, dan ulasan toko.
+      </p>
+
+      <div class="guard-actions">
+        <button class="btn-admin-primary" onclick="loginAsAdminDemo()">
+          <i class="fa-solid fa-key"></i> Masuk Otomatis sebagai Admin Demo
+        </button>
+        <a href="/" class="btn-admin-secondary">
+          <i class="fa-solid fa-arrow-left"></i> Kembali ke Toko
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Script Files -->
+  <script src="js/api.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+
+</html>

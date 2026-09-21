@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorium Riset Testbed NoSQL Injection — GawaiKita</title>
+  <meta name="description"
+    content="Portal pengujian eksperimental efektivitas middleware sanitasi dan validasi skema terhadap serangan NoSQL Injection pada MongoDB REST API.">
+
+  <!-- Google Fonts: Space Grotesk & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&family=Fira+Code:wght@400;600&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="css/research.css">
+</head>
+
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="lab-header">
+    <div class="container lab-header-inner">
+      <div class="lab-brand">
+        <a href="/" class="back-link" title="Kembali ke Marketplace"><i class="fa-solid fa-arrow-left"></i> Toko
+          GawaiKita</a>
+        <div class="lab-title-group">
+          <div class="lab-badge"><i class="fa-solid fa-flask-vial"></i> SECURITY RESEARCH TESTBED</div>
+          <h1>Laboratorium Evaluasi NoSQL Injection</h1>
+          <p>Topik: <em>"Evaluasi Efektivitas Middleware Sanitasi terhadap Serangan NoSQL Injection pada REST API
+              Berbasis MongoDB"</em></p>
+        </div>
+      </div>
+
+      <div class="lab-quick-nav">
+        <a href="#playground" class="btn-lab-nav active"><i class="fa-solid fa-crosshairs"></i> Live Playground</a>
+        <a href="#benchmark" class="btn-lab-nav"><i class="fa-solid fa-bolt"></i> Benchmark Otomatis</a>
+        <a href="#variants" class="btn-lab-nav"><i class="fa-solid fa-diagram-project"></i> 4 Varian Proteksi</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container lab-main">
+
+    <!-- OVERVIEW CARDS: 4 VARIAN TESTBED -->
+    <section class="lab-section" id="variants">
+      <div class="section-title">
+        <h2><i class="fa-solid fa-layer-group"></i> Arsitektur 4 Varian REST API</h2>
+        <p>Semua varian menggunakan model dan logika bisnis yang 100% identik. Satu-satunya variabel pembeda adalah
+          lapisan proteksi middleware.</p>
+      </div>
+
+      <div class="variant-cards-grid">
+        <div class="v-card v0">
+          <div class="v-card-header">
+            <span class="v-code-tag">V0</span>
+            <h3>Baseline (Tanpa Proteksi)</h3>
+          </div>
+          <p class="v-endpoint"><code>/api/v0</code></p>
+          <ul class="v-specs">
+            <li><i class="fa-solid fa-xmark text-red"></i> express-mongo-sanitize: Nonaktif</li>
+            <li><i class="fa-solid fa-xmark text-red"></i> Validasi Skema Joi: Nonaktif</li>
+            <li><i class="fa-solid fa-circle-info text-blue"></i> Sebagai titik acuan (baseline) kerentanan</li>
+          </ul>
+        </div>
+
+        <div class="v-card v1">
+          <div class="v-card-header">
+            <span class="v-code-tag">V1</span>
+            <h3>Sanitasi Saja</h3>
+          </div>
+          <p class="v-endpoint"><code>/api/v1</code></p>
+          <ul class="v-specs">
+            <li><i class="fa-solid fa-check text-green"></i> express-mongo-sanitize: <strong>Aktif</strong></li>
+            <li><i class="fa-solid fa-xmark text-red"></i> Validasi Skema Joi: Nonaktif</li>
+            <li><i class="fa-solid fa-circle-info text-blue"></i> Mengubah key <code>$</code> dan <code>.</code> menjadi
+              <code>_</code></li>
+          </ul>
+        </div>
+
+        <div class="v-card v2">
+          <div class="v-card-header">
+            <span class="v-code-tag">V2</span>
+            <h3>Validasi Skema Joi Saja</h3>
+          </div>
+          <p class="v-endpoint"><code>/api/v2</code></p>
+          <ul class="v-specs">
+            <li><i class="fa-solid fa-xmark text-red"></i> express-mongo-sanitize: Nonaktif</li>
+            <li><i class="fa-solid fa-check text-green"></i> Validasi Skema Joi: <strong>Aktif</strong></li>
+            <li><i class="fa-solid fa-circle-info text-blue"></i> Memvalidasi tipe data ketat di gerbang API</li>
+          </ul>
+        </div>
+
+        <div class="v-card v3">
+          <div class="v-card-header">
+            <span class="v-code-tag">V3</span>
+            <h3>Kombinasi Proteksi</h3>
+          </div>
+          <p class="v-endpoint"><code>/api/v3</code></p>
+          <ul class="v-specs">
+            <li><i class="fa-solid fa-check text-green"></i> express-mongo-sanitize: <strong>Aktif</strong></li>
+            <li><i class="fa-solid fa-check text-green"></i> Validasi Skema Joi: <strong>Aktif</strong></li>
+            <li><i class="fa-solid fa-circle-info text-blue"></i> Pertahanan berlapis ganda (Defense-in-Depth)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: INTERACTIVE LIVE PLAYGROUND -->
+    <section class="lab-section" id="playground">
+      <div class="section-title">
+        <h2><i class="fa-solid fa-terminal"></i> Interactive Attack Playground</h2>
+        <p>Kirimkan payload serangan NoSQL Injection atau uji false positive secara interaktif dan amati mekanisme
+          pertahanannya secara langsung.</p>
+      </div>
+
+      <div class="playground-grid">
+        <!-- Left: Configuration & Editor -->
+        <div class="pg-box config-box">
+          <div class="form-group-lab">
+            <label class="lab-label">1. Pilih Varian Target Proteksi:</label>
+            <div class="variant-radio-grid">
+              <label class="v-radio">
+                <input type="radio" name="targetVariant" value="v0" checked>
+                <div class="v-radio-box">
+                  <strong>V0</strong>
+                  <small>Baseline</small>
+                </div>
+              </label>
+              <label class="v-radio">
+                <input type="radio" name="targetVariant" value="v1">
+                <div class="v-radio-box">
+                  <strong>V1</strong>
+                  <small>Sanitize</small>
+                </div>
+              </label>
+              <label class="v-radio">
+                <input type="radio" name="targetVariant" value="v2">
+                <div class="v-radio-box">
+                  <strong>V2</strong>
+                  <small>Joi Only</small>
+                </div>
+              </label>
+              <label class="v-radio">
+                <input type="radio" name="targetVariant" value="v3">
+                <div class="v-radio-box">
+                  <strong>V3</strong>
+                  <small>Kombinasi</small>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group-lab">
+            <label class="lab-label">2. Pilih Target Endpoint:</label>
+            <select id="targetEndpoint" class="lab-select" onchange="onEndpointChange()">
+              <option value="login">POST /login (Auth Bypass via $ne / $gt)</option>
+              <option value="register">POST /register (Mass Assignment / Privilege Escalation)</option>
+              <option value="products">GET /products (Operator, ReDoS & Parameter Pollution)</option>
+              <option value="orders">GET /orders (Status Operator Injection $ne)</option>
+              <option value="adminUsers">GET /admin/users (Admin Data Exposure $regex)</option>
+            </select>
+          </div>
+
+          <div class="form-group-lab">
+            <label class="lab-label">3. Pilih Preset Payload Standar OWASP:</label>
+            <div class="presets-list" id="presetsContainer">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div class="form-group-lab">
+            <div class="editor-header">
+              <label class="lab-label" id="editorLabel">Payload Data:</label>
+              <span class="editor-hint" id="editorHint">JSON format</span>
+            </div>
+            <textarea id="payloadEditor" class="code-editor" rows="5"></textarea>
+          </div>
+
+          <button class="btn-fire-attack" id="btnExecuteAttack" onclick="executePlaygroundAttack()">
+            <i class="fa-solid fa-crosshairs"></i> Kirim Payload Uji Sekarang
+          </button>
+        </div>
+
+        <!-- Right: Live Result & Verdict -->
+        <div class="pg-box result-box">
+          <div class="result-box-header">
+            <h3>Hasil Evaluasi Respon</h3>
+            <div class="badges-row">
+              <span class="res-badge" id="resStatusCode">Ready</span>
+              <span class="res-badge-time" id="resLatency">0 ms</span>
+            </div>
+          </div>
+
+          <!-- Verdict Banner -->
+          <div class="verdict-banner" id="verdictBanner">
+            <i class="fa-solid fa-circle-info" id="verdictIcon"></i>
+            <div>
+              <h4 id="verdictTitle">Menunggu Pengujian</h4>
+              <p id="verdictDesc">Pilih varian dan payload di sebelah kiri, lalu tekan tombol "Kirim Payload Uji
+                Sekarang".</p>
+            </div>
+          </div>
+
+          <!-- Technical Analysis -->
+          <div class="tech-analysis-card" id="techAnalysisCard">
+            <h5><i class="fa-solid fa-magnifying-glass-chart"></i> Analisis Teknis Keamanan:</h5>
+            <p id="techAnalysisText">—</p>
+          </div>
+
+          <!-- Raw JSON Viewer -->
+          <div class="raw-response-wrap">
+            <div class="raw-header">
+              <span>Response Body (JSON):</span>
+              <button class="btn-copy" onclick="copyResponseJson()"><i class="fa-regular fa-copy"></i> Salin</button>
+            </div>
+            <pre><code id="rawResponseViewer">{}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: AUTOMATED BENCHMARK RUNNER -->
+    <section class="lab-section" id="benchmark">
+      <div class="section-title">
+        <h2><i class="fa-solid fa-gauge-high"></i> Benchmark Otomatis Multi-Varian</h2>
+        <p>Jalankan seluruh suite payload pengujian ke varian V0, V1, V2, dan V3 secara berurutan dalam sekali klik
+          untuk menghitung Block Rate, False Positive Rate, dan Latency Overhead.</p>
+      </div>
+
+      <div class="benchmark-card">
+        <div class="benchmark-ctrl">
+          <div class="benchmark-info">
+            <h4>Hasil Benchmark Pengujian</h4>
+            <p>Menguji 9 spektrum serangan nyata (Operator Injection, ReDoS, Blind NoSQL, Mass Assignment, Parameter Pollution) + 4 uji validitas False Positive pada 4 varian (Total 52 request) + Stress Test Konkurensi.</p>
+          </div>
+          <button class="btn-run-benchmark" id="btnRunBenchmark" onclick="runFullBenchmark()">
+            <i class="fa-solid fa-play"></i> Jalankan Benchmark Sekarang
+          </button>
+        </div>
+
+        <!-- Export Toolbar -->
+        <div class="benchmark-export-bar">
+          <span class="export-label"><i class="fa-solid fa-file-export"></i> Ekspor Data Hasil Uji:</span>
+          <div class="export-buttons">
+            <button class="btn-export btn-export-pdf" id="btnExportPdf" onclick="downloadReportPdf()" disabled title="Download Laporan Pengujian dalam format PDF">
+              <i class="fa-solid fa-file-pdf"></i> Download Laporan PDF
+            </button>
+            <button class="btn-export btn-export-json" id="btnExportJson" onclick="downloadBenchmarkJson()" disabled title="Download seluruh raw data metrik dalam format JSON">
+              <i class="fa-solid fa-file-code"></i> Download JSON
+            </button>
+          </div>
+        </div>
+
+        <div class="benchmark-table-wrap">
+          <table class="benchmark-table" id="benchmarkTable">
+            <thead>
+              <tr>
+                <th>Varian API</th>
+                <th>Lapisan Proteksi</th>
+                <th>TP / FN</th>
+                <th>TN / FP</th>
+                <th>Recall (Block Rate)</th>
+                <th>Precision</th>
+                <th>F1-Score</th>
+                <th>Throughput (RPS)</th>
+                <th>p95 Latensi</th>
+                <th>Status Ketahanan</th>
+              </tr>
+            </thead>
+            <tbody id="benchmarkTbody">
+              <tr>
+                <td colspan="10" style="text-align:center; padding: 2rem; color: #94A3B8;">
+                  Klik "Jalankan Benchmark Sekarang" untuk memulai pengujian multi-spektrum otomatis ke seluruh varian.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- CHARTS VISUALIZATION CONTAINER -->
+        <div class="benchmark-charts-section" id="benchmarkChartsSection" style="display: none;">
+          <div class="charts-header">
+            <h3><i class="fa-solid fa-chart-column"></i> Visualisasi Metrik Ilmiah Komparatif</h3>
+            <p>Diagram grafis untuk kebutuhan lampiran dan visualisasi Bab IV Hasil dan Pembahasan skripsi.</p>
+          </div>
+
+          <div class="benchmark-charts-grid">
+            <div class="chart-card">
+              <div class="chart-card-header">
+                <h4><i class="fa-solid fa-shield-halved text-cyan"></i> Daya Tangkal & Akurasi (Recall, Precision, F1)</h4>
+              </div>
+              <div class="chart-wrapper">
+                <canvas id="chartMetrics"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-card-header">
+                <h4><i class="fa-solid fa-bolt text-amber"></i> Throughput (RPS) vs Latensi p95</h4>
+              </div>
+              <div class="chart-wrapper">
+                <canvas id="chartPerformance"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card chart-card-wide">
+              <div class="chart-card-header">
+                <h4><i class="fa-solid fa-layer-group text-green"></i> Distribusi Status Serangan: Blocked vs Exploited</h4>
+              </div>
+              <div class="chart-wrapper">
+                <canvas id="chartStatusBreakdown"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="benchmark-notes" id="benchmarkSummary" style="display: none;">
+          <div class="benchmark-notes-header">
+            <h4><i class="fa-solid fa-clipboard-check text-cyan"></i> Kesimpulan Hasil Evaluasi</h4>
+          </div>
+          <div id="benchmarkSummaryText"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="lab-footer">
+    <div class="container">
+      <p>- GawaiKita Security Research Testbed -</p>
+      <p><a href="/">Kembali ke Toko Utama</a> | <a href="/admin">Panel Administrator</a></p>
+    </div>
+  </footer>
+
+  <!-- ATTACK INFO MODAL -->
+  <div class="modal-backdrop" id="attackInfoModal" style="display: none;" onclick="handleModalBackdropClick(event)">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-badge" id="modalAttackCategory">OWASP Category</span>
+          <h3 id="modalAttackTitle">Judul Serangan</h3>
+        </div>
+        <button class="btn-modal-close" onclick="closeAttackInfoModal()" title="Tutup Modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-section">
+          <h5><i class="fa-solid fa-circle-question text-cyan"></i> Konsep & Mekanisme Serangan:</h5>
+          <p id="modalAttackConcept">—</p>
+        </div>
+        <div class="modal-section">
+          <h5><i class="fa-solid fa-code text-amber"></i> Contoh Payload di Dunia Nyata:</h5>
+          <pre><code id="modalAttackPayload">{}</code></pre>
+        </div>
+        <div class="modal-section">
+          <h5><i class="fa-solid fa-triangle-exclamation text-red"></i> Potensi Dampak / Risiko (CIA Triad):</h5>
+          <p id="modalAttackImpact">—</p>
+        </div>
+        <div class="modal-section">
+          <h5><i class="fa-solid fa-shield-halved text-green"></i> Analisis Mitigasi & Pertahanan:</h5>
+          <p id="modalAttackMitigation">—</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal-action" onclick="closeAttackInfoModal()">
+          <i class="fa-solid fa-check"></i> Mengerti & Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/research.js"></script>
+</body>
+
+</html>
