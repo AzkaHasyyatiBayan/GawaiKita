@@ -27,12 +27,12 @@
 ## Gambaran Umum Proyek
 
 **GawaiKita** adalah proyek ganda (*dual-purpose platform*) yang mengintegrasikan:
-1. **Aplikasi Marketplace Gadget Siap Produksi**: Pengalaman belanja e-commerce lengkap (katalog gadget, pencarian pintar, filter dinamis multi-kriteria, keranjang, checkout pesanan terintegrasi basis data, sistem ulasan pembeli, dan portal dashboard administrator).
-2. **Laboratorium Riset Keamanan Siber (Research Testbed)**: Lingkungan pengujian ilmiah komparatif terkontrol untuk mengevaluasi efektivitas mitigasi kerentanan **NoSQL Injection (NoSQLi)** dan *logic bypass* pada REST API berbasis Express.js dan MongoDB.
+1. **Aplikasi Marketplace Gadget**: Pengalaman belanja e-commerce lengkap (katalog gadget, pencarian pintar, filter dinamis multi-kriteria, keranjang, checkout pesanan terintegrasi basis data, sistem ulasan pembeli, dan portal dashboard administrator).
+2. **Laboratorium Riset Keamanan (Research Testbed)**: Lingkungan pengujian komparatif terkontrol untuk mengevaluasi efektivitas mitigasi kerentanan **NoSQL Injection (NoSQLi)** dan *logic bypass* pada REST API berbasis Express.js dan MongoDB.
 
 ---
 
-## 🛠 Teknologi dan Dependensi
+## Teknologi dan Dependensi
 
 Sistem dibangun dengan arsitektur modern berkinerja tinggi tanpa ketergantungan berlebih (*lean and clean architecture*):
 
@@ -224,13 +224,5 @@ gawaikita/
 ├── package.json              # Manifes dependensi dan script npm
 └── server.js                 # Entrypoint server HTTP Express & koneksi MongoDB
 ```
-
----
-
-## Ekspor Laporan Riset Ilmiah (PDF & JSON)
-
-Halaman Laboratorium Riset (`/research`) dilengkapi fitur ekspor hasil analisis benchmark:
-1. **Download Laporan PDF**: Menghasilkan dokumen resmi vektor 2 halaman standar A4 yang memuat tabel Confusion Matrix 10 kolom, 3 kartu kesimpulan temuan, serta 3 grafik visualisasi kinerja tanpa halaman kosong.
-2. **Download Data Mentah (JSON)**: Mengekspor seluruh metrik kuantitatif terstruktur untuk analisis lanjutan pada software pengolah data statistik.
 
 ---
