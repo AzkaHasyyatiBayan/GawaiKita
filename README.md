@@ -1,4 +1,4 @@
-# GawaiKita — Gadget Marketplace & NoSQL Injection Research Testbed
+# GawaiKita: Gadget Marketplace & NoSQL Injection Research Testbed
 
 <div align="center">
 
