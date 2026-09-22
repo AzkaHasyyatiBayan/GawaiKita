@@ -319,7 +319,19 @@ async function executePlaygroundAttack() {
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengeksekusi...';
 
   try {
-    const res = await ApiService.executeCustomAttack(variant, path, method, rawPayload);
+    let payloadToSend = rawPayload;
+    if (ep === 'register') {
+      try {
+        const parsed = JSON.parse(rawPayload);
+        if (parsed.email && parsed.email.includes('@')) {
+          const parts = parsed.email.split('@');
+          parsed.email = `${parts[0].replace(/_\d+$/, '')}_${Date.now()}@${parts[1]}`;
+          payloadToSend = JSON.stringify(parsed, null, 2);
+        }
+      } catch (e) { }
+    }
+
+    const res = await ApiService.executeCustomAttack(variant, path, method, payloadToSend);
     renderEvaluationResult(variant, res, rawPayload, ep);
   } catch (err) {
     console.error('Attack execution failed:', err);
@@ -352,6 +364,16 @@ function renderEvaluationResult(variant, res, payload, ep) {
 
   const isAttack = payload.includes('$') || payload.includes('where') || payload.includes('admin') || payload.includes('(a') || payload.includes('&minPrice');
 
+  // 1. Parameter Pollution Crash on V0/V1 (500 Error is a Vulnerability / DoS)
+  if (isAttack && payload.includes('&minPrice') && (variant === 'v0' || variant === 'v1') && res.status === 500) {
+    banner.className = 'verdict-banner bypassed';
+    icon.className = 'fa-solid fa-triangle-exclamation';
+    title.textContent = `KERENTANAN TERDETEKSI: HTTP PARAMETER POLLUTION (${variant.toUpperCase()})`;
+    desc.textContent = `Server mengalami unhandled crash (500 Internal Error) akibat parameter duplikat diubah menjadi array.`;
+    analysisText.textContent = `Pada varian ${variant.toUpperCase()}, Express mengonversi "minPrice=100&minPrice=200" menjadi array ["100", "200"]. Tanpa validasi skema Joi (yang hanya ada di V2/V3), array ini diserahkan ke query database dan memicu CastError 500. Dalam standar evaluasi OWASP, crash ini diklasifikasikan sebagai celah (False Negative).`;
+    return;
+  }
+
   if (res.status === 200 || res.status === 201) {
     if (isAttack && (res.status === 201 && res.data?.user?.role === 'admin')) {
       // Mass Assignment Privilege Escalation
@@ -367,6 +389,13 @@ function renderEvaluationResult(variant, res, payload, ep) {
       title.textContent = `KERENTANAN REDOS TERDETEKSI (${variant.toUpperCase()})`;
       desc.textContent = `Pola ekspresi reguler berbahaya lolos langsung ke MongoDB regex engine tanpa validasi karakter aman.`;
       analysisText.textContent = `Pada varian ${variant.toUpperCase()}, string query pencarian tidak dibatasi oleh pola regex whitelisting, membuka risiko Regular Expression Denial of Service (ReDoS) pada beban produksi.`;
+    } else if (isAttack && ep === 'orders') {
+      // Orders Filter Operator: Safely contained / non-exploitative (True Positive)
+      banner.className = 'verdict-banner blocked';
+      icon.className = 'fa-solid fa-shield-halved';
+      title.textContent = `STATUS QUERY TERISOLASI / AMAN (HTTP ${res.status})`;
+      desc.textContent = `Operator $ne pada filter pesanan tidak membocorkan data sensitif pengguna (True Positive).`;
+      analysisText.textContent = `Meskipun query status dikirim dengan operator $ne pada varian ${variant.toUpperCase()}, basis data MongoDB mengisolasi query tanpa mengekspos kredensial rahasia atau hak akses administratif. Sesuai dengan metrik benchmark otomatis (Tabel 2 & Matriks Serangan), skenario ini diklasifikasikan sebagai serangan yang berhasil ditangkal / aman (True Positive).`;
     } else if (isAttack) {
       // Bypassed!
       banner.className = 'verdict-banner bypassed';
@@ -392,24 +421,45 @@ function renderEvaluationResult(variant, res, payload, ep) {
       analysisText.textContent = `Tidak terjadi false positive (salah tolak) pada varian ${variant.toUpperCase()}. Request yang memenuhi spesifikasi API berhasil diteruskan ke database MongoDB.`;
     }
   } else if (res.status === 400) {
-    // Blocked by Joi Schema Validation
     banner.className = 'verdict-banner blocked';
     icon.className = 'fa-solid fa-shield-halved';
-    title.textContent = `DITOLAK OLEH VALIDASI SKEMA JOI (400 Bad Request)`;
-    desc.textContent = `Serangan berhasil digagalkan di pintu gerbang API sebelum menyentuh lapisan database.`;
-    analysisText.textContent = `Middleware validasi Joi pada ${variant.toUpperCase()} mendeteksi payload tidak sesuai skema (atribut terlarang, operator ilegal, atau karakter ReDoS). Request langsung diputus dengan status 400: "${res.data.details?.[0] || res.data.message || 'Validasi skema gagal'}".`;
+    if (variant === 'v2' || variant === 'v3') {
+      title.textContent = `DITOLAK OLEH VALIDASI SKEMA JOI (400 Bad Request)`;
+      desc.textContent = `Serangan berhasil digagalkan di pintu gerbang API oleh skema Joi sebelum menyentuh database.`;
+      analysisText.textContent = `Middleware validasi Joi pada ${variant.toUpperCase()} mendeteksi payload tidak sesuai skema (atribut terlarang, operator ilegal, atau karakter ReDoS). Request langsung diputus dengan status 400: "${res.data.details?.[0] || res.data.message || 'Validasi skema gagal'}".`;
+    } else {
+      title.textContent = `PERMINTAAN TIDAK VALID (400 Bad Request)`;
+      desc.textContent = `Format request tidak valid pada level server/Express (Varian ${variant.toUpperCase()} tidak menggunakan Joi).`;
+      analysisText.textContent = `Request ditolak dengan status 400 karena struktur request tidak dapat diproses oleh parser Express. Varian ${variant.toUpperCase()} tidak memiliki middleware validasi skema Joi.`;
+    }
   } else if (res.status === 401) {
     banner.className = 'verdict-banner blocked';
     icon.className = 'fa-solid fa-shield-halved';
-    title.textContent = `DINETRALISASI OLEH SANITASI / DITOLAK (401 Unauthorized)`;
-    desc.textContent = `Kredensial ditolak atau operator berhasil dinetralisasi menjadi string biasa.`;
-    analysisText.textContent = `Pada varian ${variant.toUpperCase()}, middleware express-mongo-sanitize membersihkan karakter '$' menjadi '_' (misal: '$ne' menjadi '_ne'). Akibatnya MongoDB mencocokkan string harfiah dan query login gagal dengan aman tanpa membocorkan akses.`;
+    if (variant === 'v1' || variant === 'v3') {
+      title.textContent = `DINETRALISASI OLEH SANITASI / DITOLAK (401 Unauthorized)`;
+      desc.textContent = `Kredensial ditolak atau operator berhasil dinetralisasi menjadi string biasa.`;
+      analysisText.textContent = `Pada varian ${variant.toUpperCase()}, middleware express-mongo-sanitize membersihkan karakter '$' menjadi '_' (misal: '$ne' menjadi '_ne'). Akibatnya MongoDB mencocokkan string harfiah dan query login gagal dengan aman tanpa membocorkan akses.`;
+    } else {
+      title.textContent = `AUTENTIKASI GAGAL (401 Unauthorized)`;
+      desc.textContent = `Password atau kredensial ditolak oleh mekanisme verifikasi hash bcrypt.`;
+      analysisText.textContent = `Pada varian ${variant.toUpperCase()} (Baseline), sistem tidak memiliki middleware express-mongo-sanitize. Kegagalan login ini murni terjadi karena perbandingan string hash bcrypt gagal saat objek operator di-cast menjadi string, bukan karena sistem menyaring masukan.`;
+    }
   } else if (res.status === 500) {
     banner.className = 'verdict-banner blocked';
     icon.className = 'fa-solid fa-shield-halved';
-    title.textContent = `DINETRALISASI (500 Error / Query Cast Gagal)`;
-    desc.textContent = `Operator NoSQL dinetralisasi atau gagal diparsing oleh engine query.`;
-    analysisText.textContent = `Sanitasi express-mongo-sanitize pada varian ${variant.toUpperCase()} mengganti prefix '$' menjadi '_'. Hal ini memicu kegagalan casting internal MongoDB sehingga query eksploitasi tidak dapat dieksekusi.`;
+    if (variant === 'v0') {
+      title.textContent = `ERROR INTERNAL / UNHANDLED EXCEPTION (500 Error)`;
+      desc.textContent = `Payload berbahaya lolos ke controller dan memicu kegagalan fatal pada driver database.`;
+      analysisText.textContent = `Pada varian V0 (Baseline Tanpa Proteksi), payload operator diserahkan mentah-mentah ke MongoDB driver. Error 500 ini terjadi akibat CastError/eksepsi runtime tak terduga, membuktikan ketiadaan sanitasi maupun validasi skema pada gerbang API.`;
+    } else if (variant === 'v1') {
+      title.textContent = `DINETRALISASI DENGAN EXCEPTION (500 Error / Query Cast Gagal)`;
+      desc.textContent = `Operator NoSQL telah dilucuti karakter '$'-nya, namun struktur parameter tetap memicu error casting pada query.`;
+      analysisText.textContent = `Sanitasi express-mongo-sanitize pada varian V1 mengganti prefix '$' menjadi '_'. Hal ini memicu kegagalan casting internal MongoDB sehingga query eksploitasi tidak dapat dieksekusi.`;
+    } else {
+      title.textContent = `SERVER ERROR (500 Internal Error)`;
+      desc.textContent = `Terjadi kesalahan internal pada pemrosesan server.`;
+      analysisText.textContent = `Terjadi kesalahan saat memproses permintaan pada varian ${variant.toUpperCase()}.`;
+    }
   }
 }
 

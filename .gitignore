@@ -15,3 +15,7 @@ scratch/
 # Operating System Files
 .DS_Store
 Thumbs.db
+
+# Research Diagrams & Generator Script
+diagrams/
+utils/generate_diagrams.py
