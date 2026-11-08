@@ -19,3 +19,6 @@ Thumbs.db
 # Research Diagrams & Generator Script
 diagrams/
 utils/generate_diagrams.py
+
+# Other
+other_information.txt

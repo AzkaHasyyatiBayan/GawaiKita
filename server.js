@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
 const createApiRouter = require('./routes/apiFactory');
+const ensureMongo = require('./utils/ensureMongo');
 
 const app = express();
 
@@ -67,9 +68,11 @@ app.get('*', (req, res) => {
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/gawaikita';
 
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
+async function startServer() {
+  await ensureMongo();
+
+  try {
+    await mongoose.connect(MONGO_URI);
     console.log('Terhubung ke MongoDB (mongodb://127.0.0.1:27017/gawaikita)');
     app.listen(PORT, () => {
       console.log(`- Server GawaiKita berjalan di http://localhost:${PORT}`);
@@ -77,7 +80,9 @@ mongoose
       console.log(`- Panel Admin: http://localhost:${PORT}/admin`);
       console.log(`- Lab Riset Testbed: http://localhost:${PORT}/research`);
     });
-  })
-  .catch((err) => {
+  } catch (err) {
     console.error('❌ Gagal koneksi ke MongoDB:', err.message);
-  });
+  }
+}
+
+startServer();

@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
+const ensureMongo = require('./ensureMongo');
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/gawaikita';
 
@@ -121,6 +122,7 @@ const products = [
 ];
 
 async function seed() {
+  await ensureMongo();
   await mongoose.connect(MONGO_URI);
   console.log('✅ Terhubung ke MongoDB, mulai proses seeding...');
 

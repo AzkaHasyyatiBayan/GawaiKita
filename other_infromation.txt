@@ -1,0 +1,8 @@
+# Start Server
+wsl -u root -d Ubuntu service mongod start
+npm start
+wsl --shutdown
+
+# Account Information
+- Admin: admin@gawaikita.test | Password: password123
+- Customer: angga@gawaikita.test | Password: password123
