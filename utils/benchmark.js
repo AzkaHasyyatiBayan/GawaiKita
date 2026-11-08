@@ -235,6 +235,8 @@ async function runBenchmark() {
           isExploited = true;
         } else if (tc.name.includes('Exposure') && res.status === 200 && res.data.count > 0) {
           isExploited = true;
+        } else if (tc.name.includes('Orders Filter') && res.status === 200 && res.data.count > 0) {
+          isExploited = true; // Orders bocor ke penyerang tanpa otorisasi!
         } else if (tc.name.includes('Privilege Escalation') && res.status === 201 && res.data?.user?.role === 'admin') {
           isExploited = true; // Mass assignment tembus!
         } else if (tc.name.includes('ReDoS') && res.status === 200) {
